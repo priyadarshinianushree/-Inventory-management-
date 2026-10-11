@@ -97,3 +97,10 @@ List endpoints accept `q`, `page`, `per_page`, `sort`, `order` and filters such 
 - Port busy: `PORT=5001 python backend/app.py` (Windows: `set PORT=5001` first)
 - `python` not found on Mac/Linux: use `python3`
 - For real deployment set a strong `SECRET_KEY` environment variable and use a production server such as gunicorn or waitress.
+
+
+## 🎥 Project Demo
+
+Watch the video demonstration of my project:
+
+▶️ [Click here to watch the video](https://github.com/priyadarshinianushree/-Inventory-management-/blob/main/inventory-management/StockPilot_Demo.mp4)

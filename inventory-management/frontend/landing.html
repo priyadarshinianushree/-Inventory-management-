@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StockPilot - Inventory Management</title>
+<meta name="description" content="Track products, stock, warehouses and inventory transactions in one place.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233454d1'/%3E%3C/svg%3E">
+<style>
+  :root{--bg:#f3f5f9;--card:#fff;--ink:#19212f;--muted:#667389;--line:#e3e8f0;--primary:#3454d1;--primary-dark:#2a44ab;--primary-soft:#e9edfc;--side:#121a2f;--green:#12805c;--green-soft:#e1f5ec;--amber:#a15c07;--amber-soft:#fdf1d9;--red:#c0362c;--red-soft:#fde9e7;--radius:14px;--shadow:0 1px 2px rgba(20,30,55,.06),0 6px 20px rgba(20,30,55,.07)}
+  *{box-sizing:border-box}html{scroll-behavior:smooth}
+  body{margin:0;font:16px/1.6 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  .btn{display:inline-block;padding:12px 22px;border-radius:10px;font-weight:700;border:1px solid transparent;transition:.15s;cursor:pointer}
+  .btn.primary{background:#fff;color:var(--primary-dark)}.btn.primary:hover{background:var(--primary-soft)}
+  .btn.solid{background:var(--primary);color:#fff}.btn.solid:hover{background:var(--primary-dark)}
+  .btn.ghost{border-color:rgba(255,255,255,.35);color:#fff}.btn.ghost:hover{background:rgba(255,255,255,.1)}
+  /* hero */
+  .hero{background:linear-gradient(135deg,#121a2f 0%,#223a8c 100%);color:#fff;padding-bottom:90px}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:18px}
+  .logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#5b7cff,#3454d1);display:grid;place-items:center;font-weight:800;font-size:14px}
+  nav .links{display:flex;align-items:center;gap:26px;color:#c8d1ea;font-weight:500}
+  nav .links a:hover{color:#fff}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding-top:56px}
+  .pill{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:4px 14px;border-radius:99px;font-size:13px;color:#d6defa;margin-bottom:18px}
+  h1{font-size:50px;line-height:1.1;margin:0 0 18px;letter-spacing:-1.2px}
+  h1 span{color:#8fa6ff}
+  .hero p.lead{font-size:18px;color:#c8d1ea;max-width:520px;margin:0 0 28px}
+  .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .stats{display:flex;gap:34px;margin-top:38px;color:#c8d1ea;flex-wrap:wrap}
+  .stats b{display:block;color:#fff;font-size:26px;letter-spacing:-.5px}
+  /* mock dashboard */
+  .shot{border-radius:18px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.45);border:6px solid rgba(255,255,255,.14);line-height:0}
+  .shot img{width:100%;height:auto;display:block}
+  .mock{background:#fff;color:var(--ink);border-radius:16px;box-shadow:0 30px 70px rgba(0,0,0,.4);padding:16px;transform:rotate(1.2deg)}
+  .mock .bar{display:flex;gap:6px;margin-bottom:12px}.mock .bar i{width:10px;height:10px;border-radius:50%;background:#dfe4ee}
+  .mk-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+  .mk-kpi{border:1px solid var(--line);border-left:4px solid var(--primary);border-radius:10px;padding:8px 10px}
+  .mk-kpi.w{border-left-color:#f0a020}.mk-kpi.r{border-left-color:var(--red)}
+  .mk-kpi small{color:var(--muted);font-size:11px;display:block}.mk-kpi b{font-size:19px}
+  .mk-chart{display:flex;align-items:flex-end;gap:5px;height:92px;border:1px solid var(--line);border-radius:10px;padding:10px}
+  .mk-chart i{flex:1;background:var(--primary);border-radius:3px 3px 0 0}.mk-chart i.g{background:#2fae7b}
+  .mk-rows{margin-top:12px;font-size:12.5px}
+  .mk-rows div{display:flex;justify-content:space-between;align-items:center;padding:7px 2px;border-bottom:1px solid var(--line)}
+  .badge{padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700}
+  .b-red{background:var(--red-soft);color:var(--red)}.b-amber{background:var(--amber-soft);color:var(--amber)}.b-green{background:var(--green-soft);color:var(--green)}
+  /* sections */
+  section{padding:84px 0}
+  .head{text-align:center;max-width:640px;margin:0 auto 46px}
+  .head h2{font-size:34px;line-height:1.2;margin:0 0 10px;letter-spacing:-.6px}.head p{color:var(--muted);margin:0}
+  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);transition:.18s}
+  .card:hover{transform:translateY(-3px);border-color:#c5cff0}
+  .ico{width:44px;height:44px;border-radius:11px;background:var(--primary-soft);display:grid;place-items:center;margin-bottom:14px}
+  .ico svg{width:22px;height:22px;stroke:var(--primary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .card h3{margin:0 0 6px;font-size:17px}.card p{margin:0;color:var(--muted);font-size:14.5px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;margin-bottom:56px}
+  .row.rev img{order:2}
+  .row img{width:100%;height:auto;border-radius:18px;box-shadow:var(--shadow);border:1px solid var(--line);background:#fff}
+  .kicker{color:var(--primary);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.08em}
+  .row h3{font-size:28px;line-height:1.2;margin:6px 0 10px;letter-spacing:-.4px}.row p{color:var(--muted);margin:0;font-size:16.5px}
+  /* workflow */
+  .flow{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;counter-reset:s}
+  .step{position:relative;padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg)}
+  .step::before{counter-increment:s;content:counter(s);width:34px;height:34px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:800;margin-bottom:12px}
+  .step h3{margin:0 0 4px;font-size:16px}.step p{margin:0;color:var(--muted);font-size:14.5px}
+  .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+  .role .tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:99px;margin-bottom:10px;background:var(--primary-soft);color:var(--primary-dark)}
+  .role ul{margin:10px 0 0;padding-left:18px;color:var(--muted);font-size:14.5px}
+  .role code{background:var(--bg);padding:2px 7px;border-radius:6px;font-size:13px;color:var(--ink)}
+  /* cta + footer */
+  .final{background:linear-gradient(135deg,#223a8c,#3454d1);color:#fff;border-radius:20px;padding:54px 28px;text-align:center}
+  .final h2{font-size:32px;margin:0 0 8px}.final p{color:#d6defa;margin:0 0 24px}
+  footer{padding:30px 0 40px;color:var(--muted);font-size:14px;text-align:center}
+  @media(max-width:900px){.row{grid-template-columns:1fr;gap:20px}.row.rev img{order:0}.hero-grid{grid-template-columns:1fr}.mock{transform:none}h1{font-size:38px}nav .links a.hide{display:none}section{padding:60px 0}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="/"><span class="logo">SP</span>StockPilot</a>
+      <div class="links"><a class="hide" href="#features">Features</a><a class="hide" href="#workflow">Workflow</a><a class="hide" href="#roles">Roles</a>
+        <a class="btn primary" href="/app">Sign in</a></div>
+    </nav>
+    <div class="hero-grid">
+      <div>
+        <span class="pill">Products &middot; Stock &middot; Warehouses &middot; Transactions</span>
+        <h1>Know exactly what you have, <span>and where it is.</span></h1>
+        <p class="lead">StockPilot keeps every product, warehouse and stock movement in one place, with approvals, low-stock alerts and a live dashboard.</p>
+        <div class="cta"><a class="btn primary" href="/app">Open the app</a><a class="btn ghost" href="#features">See features</a></div>
+        <div class="stats"><div><b>8</b>Categories</div><div><b>4</b>Warehouses</div><div><b>3</b>User roles</div></div>
+      </div>
+      <div class="shot"><img src="images/hero-warehouse.svg" alt="Warehouse shelves with boxes, a forklift and live stock alerts" width="1200" height="800"></div>
+    </div>
+  </div>
+</header>
+
+<section id="showcase" style="padding-bottom:20px">
+  <div class="wrap">
+    <div class="head"><h2>From the shelf to the dashboard</h2><p>Every box that moves is recorded, approved and visible to the whole team.</p></div>
+    <div class="row"><img src="images/feature-scan.svg" alt="Scanning a barcode label on a carton" loading="lazy"><div><span class="kicker">Track</span><h3>Every SKU, every shelf</h3><p>Each product has a unique SKU, a supplier, prices and a reorder level. Search, filter and sort 48 demo products in any category, and see exactly how many are in each warehouse.</p></div></div>
+    <div class="row rev"><img src="images/feature-transfer.svg" alt="Stock transfer between two warehouses" loading="lazy"><div><span class="kicker">Move</span><h3>Transfers between warehouses</h3><p>Move stock from Chennai to Bengaluru in one request. Capacity limits and available quantity are checked before anything is posted, so stock never goes negative.</p></div></div>
+    <div class="row"><img src="images/feature-analytics.svg" alt="Inventory dashboard with KPIs and a movement chart" loading="lazy"><div><span class="kicker">Understand</span><h3>A dashboard that answers questions</h3><p>Inventory value, low and out-of-stock alerts, a 14-day movement chart, category breakdown and warehouse utilisation, all updated the moment a transaction is approved.</p></div></div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="head"><h2>Everything inventory needs</h2><p>From the catalogue to the shelf, every step is tracked and validated.</p></div>
+    <div class="features">
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div><h3>Product catalogue</h3><p>SKUs, categories, suppliers, prices and reorder levels with search, filters and sorting.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><h3>Multi-warehouse stock</h3><p>See quantity per warehouse, capacity usage and the value of what you hold.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div><h3>Stock transactions</h3><p>Stock in, stock out, transfers and adjustments, each with a reference number and audit trail.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><h3>Low-stock alerts</h3><p>Items at or below their reorder level are flagged on the dashboard automatically.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div><h3>Live dashboard</h3><p>Inventory value, 14-day movement chart, category breakdown and recent activity.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div><h3>Safe by design</h3><p>No negative stock, capacity limits, unique SKUs and validation in the browser and on the server.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="workflow" class="flow">
+  <div class="wrap">
+    <div class="head"><h2>A simple approval workflow</h2><p>Stock only changes when a manager approves, so every number can be trusted.</p></div>
+    <div class="steps">
+      <div class="step"><h3>Staff raises a request</h3><p>Stock in, out, transfer or adjustment is created as Pending.</p></div>
+      <div class="step"><h3>Manager reviews</h3><p>Approve it, or reject it with a reason. Staff can cancel their own.</p></div>
+      <div class="step"><h3>Stock updates instantly</h3><p>Quantities, dashboard and alerts refresh the moment it is approved.</p></div>
+      <div class="step"><h3>History is kept</h3><p>Completed transactions are never deleted; corrections use adjustments.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="roles">
+  <div class="wrap">
+    <div class="head"><h2>The right access for everyone</h2><p>Three roles keep day-to-day work fast and sensitive actions controlled.</p></div>
+    <div class="roles">
+      <div class="card role"><span class="tag">Admin</span><h3>Full control</h3><ul><li>Everything a manager can do</li><li>Create and manage users</li></ul></div>
+      <div class="card role"><span class="tag">Manager</span><h3>Run the operation</h3><ul><li>Manage products, suppliers, warehouses</li><li>Approve or reject transactions</li></ul></div>
+      <div class="card role"><span class="tag">Staff</span><h3>Get work done</h3><ul><li>View stock and products</li><li>Raise and track their own requests</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="final">
+      <h2>Ready to take control of your stock?</h2>
+      <p>Sign in to manage products, stock and warehouses.</p>
+      <a class="btn primary" href="/app">Sign in to StockPilot</a>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">&copy; StockPilot Inventory Management</div></footer>
+</body>
+</html>
